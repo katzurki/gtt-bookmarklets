@@ -1,0 +1,7 @@
+Drag these links to the bookmark bar to create a bookmarklet.
+<br>
+<a href="javascript:document.evaluate("//div[(@id='gtc-merge-parent')]/div[(@class='modal-dialog gtc-merge')]/div[(@class='modal-dialog-buttons')]/button[(text()='OK')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();">Merge</a>
+<br>
+<a href="javascript:(function(){const a=f=>new MouseEvent(f,{bubbles:!0}),b=f=>()=>document.querySelector(f).click(),c=f=>`#fnrDialogParent .gtc-rep-modal-dialog .modal-dialog-buttons button[name=${f}]`,d={imgSel:(f=>()=>{const g=a('mousedown'),h=a('mouseup'),i=document.querySelector(f);i.dispatchEvent(g),i.dispatchEvent(h)})('img.jfk-button-img.gtc-img-rep'),applyToAll:b(c('repDialogReplaceAll')),exit:b(c('repDialogExit'))};d.imgSel(),d.applyToAll(),d.exit()})();">Apply to all</a>
+<br>
+<a href="javascript: (function() { var copyToClipboard = (function() { var _dataString = null; document.addEventListener("copy", function(e) { if (_dataString !== null) { try { e.clipboardData.setData("text/plain", _dataString); e.preventDefault(); } finally { _dataString = null; } } }); return function(data) { _dataString = data; document.execCommand("copy"); }; })(); const a = [...document.querySelectorAll('.notranslate').values()], b = 0 === a.length ? [...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')[1].contentDocument.querySelectorAll('.notranslate').values()] : a; copyToClipboard(b.find(c => !!c.parentNode.querySelector('.goog-gtc-unit-highlight')).querySelector('a').innerText) })();">Copy Name</a>
