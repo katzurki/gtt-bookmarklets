@@ -1,7 +1,218 @@
-Drag these links to the bookmark bar to create a bookmarklet.
-<br>
-<a href="javascript:document.evaluate("//div[(@id='gtc-merge-parent')]/div[(@class='modal-dialog gtc-merge')]/div[(@class='modal-dialog-buttons')]/button[(text()='OK')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();">Merge</a>
-<br>
-<a href="javascript:(function(){const a=f=>new MouseEvent(f,{bubbles:!0}),b=f=>()=>document.querySelector(f).click(),c=f=>`#fnrDialogParent .gtc-rep-modal-dialog .modal-dialog-buttons button[name=${f}]`,d={imgSel:(f=>()=>{const g=a('mousedown'),h=a('mouseup'),i=document.querySelector(f);i.dispatchEvent(g),i.dispatchEvent(h)})('img.jfk-button-img.gtc-img-rep'),applyToAll:b(c('repDialogReplaceAll')),exit:b(c('repDialogExit'))};d.imgSel(),d.applyToAll(),d.exit()})();">Apply to all</a>
-<br>
-<a href="javascript: (function() { var copyToClipboard = (function() { var _dataString = null; document.addEventListener("copy", function(e) { if (_dataString !== null) { try { e.clipboardData.setData("text/plain", _dataString); e.preventDefault(); } finally { _dataString = null; } } }); return function(data) { _dataString = data; document.execCommand("copy"); }; })(); const a = [...document.querySelectorAll('.notranslate').values()], b = 0 === a.length ? [...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')[1].contentDocument.querySelectorAll('.notranslate').values()] : a; copyToClipboard(b.find(c => !!c.parentNode.querySelector('.goog-gtc-unit-highlight')).querySelector('a').innerText) })();">Copy Name</a>
+<p>Adding Shortcuts to GTT (Merge, Apply to all, etc.)</p>
+<p>&nbsp;</p>
+<p>TL;DR: Drag these bookmarklets to the bookmarks bar, then use a shortcut manager to &ldquo;click&rdquo; and execute them (for example, the very excellent <a href="https://chrome.google.com/webstore/detail/shortkeys-custom-keyboard/logpjaacgmcbpdkdchjiaagddngobkck">Shortkeys for Chrome</a>, by Mike Crittenden; don&rsquo;t forget to tick off <em>Active while in form fields</em> in <em>Activation Settings</em> for each shortcut):</p>
+<p><a href="javascript:document.evaluate("//div[(@id='gtc-merge-parent')]/div[(@class='modal-dialog gtc-merge')]/div[(@class='modal-dialog-buttons')]/button[(text()='OK')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();">Merge</a>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:(function(){const a=f=>new MouseEvent(f,{bubbles:!0}),b=f=>()=>document.querySelector(f).click(),c=f=>`#fnrDialogParent .gtc-rep-modal-dialog .modal-dialog-buttons button[name=${f}]`,d={imgSel:(f=>()=>{const g=a('mousedown'),h=a('mouseup'),i=document.querySelector(f);i.dispatchEvent(g),i.dispatchEvent(h)})('img.jfk-button-img.gtc-img-rep'),applyToAll:b(c('repDialogReplaceAll')),exit:b(c('repDialogExit'))};d.imgSel(),d.applyToAll(),d.exit()})();">Apply to all</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:(function(){var copyToClipboard=(function(){var _dataString=null;document.addEventListener('copy',function(e){if(_dataString!==null){try{e.clipboardData.setData('text/plain',_dataString);e.preventDefault();}finally{ _dataString=null;}}});return function(data){ _dataString=data;document.execCommand('copy');};})();const a=[...document.querySelectorAll('.notranslate').values()],b=0 === a.length ? [...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')[1].contentDocument.querySelectorAll('.notranslate').values()] : a; copyToClipboard(b.find(c => !!c.parentNode.querySelector('.goog-gtc-unit-highlight')).querySelector('a').innerText) })();">Copy current hotel name</a> (relevant only for Booking.com translators)</p>
+<p>Works in Windows and Google Chrome, and [unconfirmed] OS X and Chrome.</p>
+<p>Google Translator Toolkit is a simple and lightweight CAT-tool, and most of its functionality is accessible through built-in shortcuts:&nbsp;</p>
+<table width="327">
+<tbody>
+<tr>
+<td colspan="2" width="327">
+<p><strong><em><u>Navigation</u></em></strong></p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+Home&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Select first unit</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+End&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Select last unit</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+K&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Select previous unit</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+J&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Select next unit</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Alt+K&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Select previous untranslated unit</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Alt+J&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Select next untranslated unit</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Alt+L&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Select next invalid unit</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong><em><u>Editing</u></em></strong></p>
+</td>
+<td width="148">
+<p><strong>&nbsp;</strong></p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+F&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Find and replace</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+S&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Save</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+Z&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Undo</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+Y&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Redo</p>
+</td>
+</tr>
+<tr>
+<td width="179">
+<p><strong>Ctrl+M&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Add comment</p>
+</td>
+</tr>
+<tr>
+<td colspan="2" width="327">
+<p><strong><em><u>Translation</u></em></strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+K&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Open/close toolkit</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+S&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Replace translation with source</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+M&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Replace translation with machine translation</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+L&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Replace translation with translation memory</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+A&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Start automatic translation search</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+C&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Start custom translation search for highlighted text</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+I&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Automatically insert placeholders</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl</strong></p>
+<p><strong>+Shift+U&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Clear all placeholders</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Ctrl+Shift+Space&nbsp;</strong></p>
+</td>
+<td width="148">
+<p>Show placeholder menu</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>However, two of the most often used actions, Merge Down and Apply to All, can only be accessed by clicking the UI element. For Merge, this requires 4 clicks: Edit -&gt; Merge Segments -&gt; With next segment -&gt; OK, which is a lot of clicking for something that should be at the tips of your fingers&mdash;with a keyboard shortcut.</p>
+<p>It&rsquo;s possible to simulate this functionality with a Javascript bookmarklet, which can be mapped to a keyboard shortcut using an appropriate browser extension. Just drag these links to the bookmarks bar, and there you have the bookmarklets.</p>
+<p><em>Merge</em></p>
+<p>Merges the current segment with the next. Saves 4 clicks. My mapping is Alt+S.</p>
+<p><em>&nbsp;</em></p>
+<p><em>Apply to all</em></p>
+<p>Propagates current segment translation across identical segments in the document. Saves 2 clicks. My mapping is Alt+A.</p>
+<p><em>Copy current hotel name</em></p>
+<p>Copies the current property source name, deriving it from the editbox position. Note that you still need to paste it by pressing Ctrl+V. My mapping is Ctrl+Shift+V. This copies the hotel name, and you press Ctrl+V to paste it where needed.</p>
+<p>In order to map a keyboard shortcut to a bookmarklet, I use Shortkeys for Chrome. The other shortcut managers did not handle clicking correctly, and bookmarklets were failing to fire. Kudos to Mike Crittenden for developing it! Setting it up is more or less self-explanatory: choose a combination, choose Run bookmarklet, specify which bookmarklet, and don&rsquo;t forget to check &ldquo;Active in text fields&rdquo; for each shortcut.</p>
+<p>&nbsp;</p>
+<p>Reload the GTT and you&rsquo;re good to go!</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
