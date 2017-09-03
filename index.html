@@ -227,7 +227,7 @@ Implemented by <a href="mailto:katzurki@gmail.com">Dan Biktashev</a>
 </table>
 <h2>The Problem</h2>
 <p>However, two of the most often used actions, Merge Down and Apply to All, can only be accessed by clicking the UI element. For Merge, this requires 4 clicks: <i>Edit -&gt; Merge Segments -&gt; With next segment -&gt; OK</i>, which is a lot of clicking without a keyboard shortcut.</p>
-<h2>The Problem</h2>
+<h2>The Solution</h2>
 <p>It&rsquo;s possible to simulate this functionality with a Javascript bookmarklet, which can be mapped to a keyboard shortcut using a browser extension. </p>
 <p><em><a href="javascript:(function()%7Bdocument.evaluate(%22%2F%2Fdiv%5B(%40id%3D'gtc-merge-parent')%5D%2Fdiv%5B(%40class%3D'modal-dialog%20gtc-merge')%5D%2Fdiv%5B(%40class%3D'modal-dialog-buttons')%5D%2Fbutton%5B(text()%3D'OK')%5D%22%2Cdocument%2Cnull%2CXPathResult.FIRST_ORDERED_NODE_TYPE%2Cnull).singleNodeValue.click()%7D)()">Merge</a></em></p>
 <p>Merges the current segment with the next. Saves 4 clicks. My mapping is Alt+S.</p>
