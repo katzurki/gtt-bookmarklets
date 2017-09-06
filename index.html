@@ -1,21 +1,18 @@
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<head>
-<title>Extending Google Translator Toolkit (GTT) Shortcuts (Merge, Apply to all, etc.)</title>
+<link rel="stylesheet"
+      href="http://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
 <style>
-code {
-  background-color: #EEEEEE;
-  font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
-}
 pre {
-  background-color: #EEEEEE;
-  font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
-  margin-bottom: 10px;
-  max-height: 600px;
-  overflow: auto;
-  padding: 5px;
-  width: auto;
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 </style>
+<script src="http://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<head>
+<title>Extending Google Translator Toolkit (GTT) Shortcuts (Merge, Apply to all, etc.)</title>
 </head>
 <h2><p>Custom GTT Shortcuts (Merge, Apply to All, etc.) Using Bookmarklets</p></h2>
 Implemented by <a href="mailto:katzurki@gmail.com">Dan Biktashev</a> v0.1 Sep 1 2017
@@ -224,69 +221,72 @@ Implemented by <a href="mailto:katzurki@gmail.com">Dan Biktashev</a> v0.1 Sep 1 
 <p>It&rsquo;s possible to simulate this functionality with a Javascript bookmarklet, which can be mapped to a keyboard shortcut using a browser extension. </p>
 <p><em><a href="javascript:(function()%7Bdocument.evaluate(%22%2F%2Fdiv%5B(%40id%3D'gtc-merge-parent')%5D%2Fdiv%5B(%40class%3D'modal-dialog%20gtc-merge')%5D%2Fdiv%5B(%40class%3D'modal-dialog-buttons')%5D%2Fbutton%5B(text()%3D'OK')%5D%22%2Cdocument%2Cnull%2CXPathResult.FIRST_ORDERED_NODE_TYPE%2Cnull).singleNodeValue.click()%7D)()">Merge</a></em></p>
 <p>Merges the current segment with the next. Saves 4 clicks. My mapping is Alt+S.</p>
-<code>
-document.evaluate(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"//div[(@id='gtc-merge-parent')]/div[(@class='modal-dialog&nbsp;gtc-merge')]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;/div[(@class='modal-dialog-buttons')]/button[(text()='OK')]",document,NULL,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;XPathResult.FIRST_ORDERED_NODE_TYPE,NULL<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).singleNodeValue.click();<br>
-</code>
+<br>Source code:
+<pre><code>
+document.evaluate(
+    "//div[(@id='gtc-merge-parent')]/div[(@class='modal-dialog gtc-merge')]
+    /div[(@class='modal-dialog-buttons')]/button[(text()='OK')]",
+    document,NULL,XPathResult.FIRST_ORDERED_NODE_TYPE,NULL
+                 ).singleNodeValue.click();
+</pre></code>
 <p><em>&nbsp;</em></p>
 <p><em><a href="javascript:(function()%7Bconst%20a%3Df%3D%3Enew%20MouseEvent(f%2C%7Bbubbles%3A!0%7D)%2Cb%3Df%3D%3E()%3D%3Edocument.querySelector(f).click()%2Cc%3Df%3D%3E%60%23fnrDialogParent%20.gtc-rep-modal-dialog%20.modal-dialog-buttons%20button%5Bname%3D%24%7Bf%7D%5D%60%2Cd%3D%7BimgSel%3A(f%3D%3E()%3D%3E%7Bconst%20g%3Da('mousedown')%2Ch%3Da('mouseup')%2Ci%3Ddocument.querySelector(f)%3Bi.dispatchEvent(g)%2Ci.dispatchEvent(h)%7D)('img.jfk-button-img.gtc-img-rep')%2CapplyToAll%3Ab(c('repDialogReplaceAll'))%2Cexit%3Ab(c('repDialogExit'))%7D%3Bd.imgSel()%2Cd.applyToAll()%2Cd.exit()%7D)()">Apply to all</a></em></p>
 <p>Propagates current segment translation across identical segments in the document. Saves 2 clicks. My mapping is Alt+A.</p>
-<code>
-(function()&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;a&nbsp;=&nbsp;f&nbsp;=>&nbsp;new&nbsp;MouseEvent(f,&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bubbles:&nbsp;!0<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b&nbsp;=&nbsp;f&nbsp;=>&nbsp;()&nbsp;=>&nbsp;document.querySelector(f).click(),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c&nbsp;=&nbsp;f&nbsp;=>&nbsp;`#fnrDialogParent&nbsp;.gtc-rep-modal-dialog&nbsp;.modal-dialog-buttons&nbsp;button[name=${f}]`,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d&nbsp;=&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imgSel:&nbsp;(f&nbsp;=>&nbsp;()&nbsp;=>&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;g&nbsp;=&nbsp;a('mousedown'),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h&nbsp;=&nbsp;a('mouseup'),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i&nbsp;=&nbsp;document.querySelector(f);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.dispatchEvent(g),&nbsp;i.dispatchEvent(h)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})('img.jfk-button-img.gtc-img-rep'),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;applyToAll:&nbsp;b(c('repDialogReplaceAll')),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit:&nbsp;b(c('repDialogExit'))<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
-&nbsp;&nbsp;&nbsp;&nbsp;d.imgSel(),&nbsp;d.applyToAll(),&nbsp;d.exit()<br>
-})();<br>
-</code>
+<br>
+Source code:
+<pre><code>
+(function() {
+    const a = f => new MouseEvent(f, {
+            bubbles: !0
+        }),
+        b = f => () => document.querySelector(f).click(),
+        c = f => `#fnrDialogParent .gtc-rep-modal-dialog .modal-dialog-buttons button[name=${f}]`,
+        d = {
+            imgSel: (f => () => {
+                const g = a('mousedown'),
+                    h = a('mouseup'),
+                    i = document.querySelector(f);
+                i.dispatchEvent(g), i.dispatchEvent(h)
+            })('img.jfk-button-img.gtc-img-rep'),
+            applyToAll: b(c('repDialogReplaceAll')),
+            exit: b(c('repDialogExit'))
+        };
+    d.imgSel(), d.applyToAll(), d.exit()
+})();
+</pre></code>
 <br>
 <p><em><a href="javascript:(function()%7Bvar%20copyToClipboard%20%3D%20(function()%20%7B%20var%20_dataString%20%3D%20null%3B%20document.addEventListener(%22copy%22%2C%20function(e)%20%7B%20if%20(_dataString%20!%3D%3D%20null)%20%7B%20try%20%7B%20e.clipboardData.setData(%22text%2Fplain%22%2C%20_dataString)%3B%20e.preventDefault()%3B%20%7D%20finally%20%7B%20_dataString%20%3D%20null%3B%20%7D%20%7D%20%7D)%3B%20return%20function(data)%20%7B%20_dataString%20%3D%20data%3B%20document.execCommand(%22copy%22)%3B%20%7D%3B%20%7D)()%3B%20const%20a%20%3D%20%5B...document.querySelectorAll('.notranslate').values()%5D%2C%20b%20%3D%200%20%3D%3D%3D%20a.length%20%3F%20%5B...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')%5B1%5D.contentDocument.querySelectorAll('.notranslate').values()%5D%20%3A%20a%3B%20copyToClipboard(b.find(c%20%3D%3E%20!!c.parentNode.querySelector('.goog-gtc-unit-highlight')).querySelector('a').innerText)%7D)()">Copy current hotel name</a></em></p>
-<p>Copies the current property source name, deriving it from the editbox position. Note that you still need to paste it by pressing Ctrl+V. My mapping is Ctrl+Shift+V. This copies the hotel name, and you press Ctrl+V to paste it where needed.</p>
-<code>
-(function()&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;copyToClipboard&nbsp;=&nbsp;(function()&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;_dataString&nbsp;=&nbsp;null;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.addEventListener("copy",&nbsp;function(e)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(_dataString&nbsp;!==&nbsp;null)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.clipboardData.setData("text/plain",&nbsp;_dataString);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.preventDefault();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;finally&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_dataString&nbsp;=&nbsp;null;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;function(data)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_dataString&nbsp;=&nbsp;data;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.execCommand("copy");<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;a&nbsp;=&nbsp;[...document.querySelectorAll('.notranslate')<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.values()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b&nbsp;=&nbsp;0&nbsp;===&nbsp;a.length&nbsp;?&nbsp;[...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')[1].contentDocument.querySelectorAll('.notranslate')<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.values()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]&nbsp;:&nbsp;a;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;copyToClipboard(b.find(c&nbsp;=>&nbsp;!!c.parentNode.querySelector('.goog-gtc-unit-highlight'))<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.querySelector('a')<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.innerText)<br>
-&nbsp;})()<br><br>
-</code>
+<p>Copies the current property source name, deriving it from the editbox position. Note that you still need to paste it by pressing Ctrl+V. My mapping is Ctrl+Shift+V. This copies the hotel name, and you press Ctrl+V to paste it where needed.</p><br>
+Source code:
+<pre><code>
+(function() {
+     var copyToClipboard = (function() {
+         var _dataString = null;
+         document.addEventListener("copy", function(e) {
+             if (_dataString !== null) {
+                 try {
+                     e.clipboardData.setData("text/plain", _dataString);
+                     e.preventDefault();
+                 } finally {
+                     _dataString = null;
+                 }
+             }
+         });
+         return function(data) {
+             _dataString = data;
+             document.execCommand("copy");
+         };
+     })();
+     const a = [...document.querySelectorAll('.notranslate')
+             .values()
+         ],
+         b = 0 === a.length ? [...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')[1].contentDocument.querySelectorAll('.notranslate')
+             .values()
+         ] : a;
+     copyToClipboard(b.find(c => !!c.parentNode.querySelector('.goog-gtc-unit-highlight'))
+         .querySelector('a')
+         .innerText)
+ })()</pre></code>
 <h2>The Implementation</h2>
 <p>In order to map a keyboard shortcut to a bookmarklet, I use <a href="https://chrome.google.com/webstore/detail/shortkeys-custom-keyboard/logpjaacgmcbpdkdchjiaagddngobkck">Shortkeys for Chrome</a>. The other shortcut managers failed to emulate a click properly, and the bookmarklets wouldn't fire. Kudos to Mike Crittenden for developing it! Setting it up is more or less self-explanatory: Choose a keyboard combination, choose <i>Open bookmarklet</i> for the action it triggers, specify which bookmarklet, and lastly, don&rsquo;t forget to check <i>Active in text fields</i> for each shortcut.</p>
 Here's what my configuration looks like (it's crucial to tick off the <i>Active while in form fields</i> box for <i>every</i> shortcut).
