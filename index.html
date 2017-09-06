@@ -22,8 +22,89 @@ Implemented by <a href="mailto:katzurki@gmail.com">Dan Biktashev</a> v0.1 Sep 1 
 <p>2. Use a shortcut manager to map them to a key combination (I recommend the very excellent <a href="https://chrome.google.com/webstore/detail/shortkeys-custom-keyboard/logpjaacgmcbpdkdchjiaagddngobkck">Shortkeys for Chrome</a>, by Mike Crittenden. Map a desired key combination to a bookmarklet and don&rsquo;t forget to tick off <em>Active while in form fields</em> in <em>Activation Settings</em> for each shortcut), and there you have it.</p>
 <p>Tested in Google Chrome on Windows/Mac.</p>
 <hr>
-<h2><p>Overview</p></h2>
-<p>Google Translator Toolkit is a simple and lightweight CAT-tool, and most of its functionality is accessible through built-in shortcuts as is the norm for well-designed UI/UX:&nbsp;</p>
+<h2><p>Overview. The Problem</p></h2>
+<p>Google Translator Toolkit is a simple and lightweight CAT-tool, and most of its functionality is accessible through built-in shortcuts.</p>
+<p>However, two of the most often required actions, Merge Down and Apply to All, can only be invoked by pointing-and-clicking as there is no keyboard shortcut defined for them. Let's fix this as the resourceful translators we are.
+</p>
+<h2>The Solution</h2>
+<p>It&rsquo;s possible to simulate this functionality with a Javascript bookmarklet, which can be mapped to a keyboard shortcut through one of many browser extensions. </p>
+<p><em><a href="javascript:(function()%7Bdocument.evaluate(%22%2F%2Fdiv%5B(%40id%3D'gtc-merge-parent')%5D%2Fdiv%5B(%40class%3D'modal-dialog%20gtc-merge')%5D%2Fdiv%5B(%40class%3D'modal-dialog-buttons')%5D%2Fbutton%5B(text()%3D'OK')%5D%22%2Cdocument%2Cnull%2CXPathResult.FIRST_ORDERED_NODE_TYPE%2Cnull).singleNodeValue.click()%7D)()">Merge</a></em></p>
+<p>Merges the current segment with the next. Saves 4 clicks. My mapping is Alt+S.</p>
+<br>Source code (originally written by Mitya Gurin):
+<pre><code>
+document.evaluate(
+    "//div[(@id='gtc-merge-parent')]/div[(@class='modal-dialog gtc-merge')]
+    /div[(@class='modal-dialog-buttons')]/button[(text()='OK')]",
+    document,NULL,XPathResult.FIRST_ORDERED_NODE_TYPE,NULL
+                 ).singleNodeValue.click();
+</pre></code>
+<p><em>&nbsp;</em></p>
+<p><em><a href="javascript:(function()%7Bconst%20a%3Df%3D%3Enew%20MouseEvent(f%2C%7Bbubbles%3A!0%7D)%2Cb%3Df%3D%3E()%3D%3Edocument.querySelector(f).click()%2Cc%3Df%3D%3E%60%23fnrDialogParent%20.gtc-rep-modal-dialog%20.modal-dialog-buttons%20button%5Bname%3D%24%7Bf%7D%5D%60%2Cd%3D%7BimgSel%3A(f%3D%3E()%3D%3E%7Bconst%20g%3Da('mousedown')%2Ch%3Da('mouseup')%2Ci%3Ddocument.querySelector(f)%3Bi.dispatchEvent(g)%2Ci.dispatchEvent(h)%7D)('img.jfk-button-img.gtc-img-rep')%2CapplyToAll%3Ab(c('repDialogReplaceAll'))%2Cexit%3Ab(c('repDialogExit'))%7D%3Bd.imgSel()%2Cd.applyToAll()%2Cd.exit()%7D)()">Apply to all</a></em></p>
+<p>Propagates current segment translation across identical segments in the document. Saves 2 clicks. My mapping is Alt+A.</p>
+<br>
+Source code:
+<pre><code>
+(function() {
+    const a = f => new MouseEvent(f, {
+            bubbles: !0
+        }),
+        b = f => () => document.querySelector(f).click(),
+        c = f => `#fnrDialogParent .gtc-rep-modal-dialog .modal-dialog-buttons button[name=${f}]`,
+        d = {
+            imgSel: (f => () => {
+                const g = a('mousedown'),
+                    h = a('mouseup'),
+                    i = document.querySelector(f);
+                i.dispatchEvent(g), i.dispatchEvent(h)
+            })('img.jfk-button-img.gtc-img-rep'),
+            applyToAll: b(c('repDialogReplaceAll')),
+            exit: b(c('repDialogExit'))
+        };
+    d.imgSel(), d.applyToAll(), d.exit()
+})();
+</pre></code>
+<br>
+<p><em><a href="javascript:(function()%7Bvar%20copyToClipboard%20%3D%20(function()%20%7B%20var%20_dataString%20%3D%20null%3B%20document.addEventListener(%22copy%22%2C%20function(e)%20%7B%20if%20(_dataString%20!%3D%3D%20null)%20%7B%20try%20%7B%20e.clipboardData.setData(%22text%2Fplain%22%2C%20_dataString)%3B%20e.preventDefault()%3B%20%7D%20finally%20%7B%20_dataString%20%3D%20null%3B%20%7D%20%7D%20%7D)%3B%20return%20function(data)%20%7B%20_dataString%20%3D%20data%3B%20document.execCommand(%22copy%22)%3B%20%7D%3B%20%7D)()%3B%20const%20a%20%3D%20%5B...document.querySelectorAll('.notranslate').values()%5D%2C%20b%20%3D%200%20%3D%3D%3D%20a.length%20%3F%20%5B...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')%5B1%5D.contentDocument.querySelectorAll('.notranslate').values()%5D%20%3A%20a%3B%20copyToClipboard(b.find(c%20%3D%3E%20!!c.parentNode.querySelector('.goog-gtc-unit-highlight')).querySelector('a').innerText)%7D)()">Copy current hotel name</a></em></p>
+<p>Copies the current property source name, deriving it from the editbox position. Note that you still need to paste it by pressing Ctrl+V. My mapping is Ctrl+Shift+V. This copies the hotel name, and you press Ctrl+V to paste it where needed.</p><br>
+Source code:
+<pre><code>
+(function() {
+     var copyToClipboard = (function() {
+         var _dataString = null;
+         document.addEventListener("copy", function(e) {
+             if (_dataString !== null) {
+                 try {
+                     e.clipboardData.setData("text/plain", _dataString);
+                     e.preventDefault();
+                 } finally {
+                     _dataString = null;
+                 }
+             }
+         });
+         return function(data) {
+             _dataString = data;
+             document.execCommand("copy");
+         };
+     })();
+     const a = [...document.querySelectorAll('.notranslate')
+             .values()
+         ],
+         b = 0 === a.length ? [...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')[1].contentDocument.querySelectorAll('.notranslate')
+             .values()
+         ] : a;
+     copyToClipboard(b.find(c => !!c.parentNode.querySelector('.goog-gtc-unit-highlight'))
+         .querySelector('a')
+         .innerText)
+ })()</pre></code>
+<h2>The Implementation</h2>
+<p>In order to map a keyboard shortcut to a bookmarklet, I use <a href="https://chrome.google.com/webstore/detail/shortkeys-custom-keyboard/logpjaacgmcbpdkdchjiaagddngobkck">Shortkeys for Chrome</a>. The other shortcut managers failed to emulate a click properly, and the bookmarklets wouldn't fire. Kudos to Mike Crittenden for developing it! Setting it up is more or less self-explanatory: Choose a keyboard combination, choose <i>Open bookmarklet</i> for the action it triggers, specify which bookmarklet, and lastly, don&rsquo;t forget to check <i>Active in text fields</i> for each shortcut.</p>
+Here's what my configuration looks like (it's crucial to tick off the <i>Active while in form fields</i> box for <i>every</i> shortcut).
+<br><br><hr>
+<center><img src="http://katzurki.github.io/gtt-bookmarklets/shortkeys_example_configuration.jpg"></center>
+<br><br><hr>
+<p>Reload the GTT and you&rsquo;re good to go!</p>
+<hr><br>
+<h2>Addendum: Built-in GTT Shortcuts</h2><br>
 <table width="327">
 <tbody>
 <tr>
@@ -214,82 +295,5 @@ Implemented by <a href="mailto:katzurki@gmail.com">Dan Biktashev</a> v0.1 Sep 1 
 </tr>
 </tbody>
 </table>
-<h2>The Problem</h2>
-<p>However, two of the most often used actions, Merge Down and Apply to All, can only be accessed by clicking the UI element. For Merge, this requires 4 clicks: <i>Edit -&gt; Merge Segments -&gt; With next segment -&gt; OK</i>, which is a lot of clicking without a keyboard shortcut.</p>
-<h2>The Solution</h2>
-<p>It&rsquo;s possible to simulate this functionality with a Javascript bookmarklet, which can be mapped to a keyboard shortcut using a browser extension. </p>
-<p><em><a href="javascript:(function()%7Bdocument.evaluate(%22%2F%2Fdiv%5B(%40id%3D'gtc-merge-parent')%5D%2Fdiv%5B(%40class%3D'modal-dialog%20gtc-merge')%5D%2Fdiv%5B(%40class%3D'modal-dialog-buttons')%5D%2Fbutton%5B(text()%3D'OK')%5D%22%2Cdocument%2Cnull%2CXPathResult.FIRST_ORDERED_NODE_TYPE%2Cnull).singleNodeValue.click()%7D)()">Merge</a></em></p>
-<p>Merges the current segment with the next. Saves 4 clicks. My mapping is Alt+S.</p>
-<br>Source code:
-<pre><code>
-document.evaluate(
-    "//div[(@id='gtc-merge-parent')]/div[(@class='modal-dialog gtc-merge')]
-    /div[(@class='modal-dialog-buttons')]/button[(text()='OK')]",
-    document,NULL,XPathResult.FIRST_ORDERED_NODE_TYPE,NULL
-                 ).singleNodeValue.click();
-</pre></code>
-<p><em>&nbsp;</em></p>
-<p><em><a href="javascript:(function()%7Bconst%20a%3Df%3D%3Enew%20MouseEvent(f%2C%7Bbubbles%3A!0%7D)%2Cb%3Df%3D%3E()%3D%3Edocument.querySelector(f).click()%2Cc%3Df%3D%3E%60%23fnrDialogParent%20.gtc-rep-modal-dialog%20.modal-dialog-buttons%20button%5Bname%3D%24%7Bf%7D%5D%60%2Cd%3D%7BimgSel%3A(f%3D%3E()%3D%3E%7Bconst%20g%3Da('mousedown')%2Ch%3Da('mouseup')%2Ci%3Ddocument.querySelector(f)%3Bi.dispatchEvent(g)%2Ci.dispatchEvent(h)%7D)('img.jfk-button-img.gtc-img-rep')%2CapplyToAll%3Ab(c('repDialogReplaceAll'))%2Cexit%3Ab(c('repDialogExit'))%7D%3Bd.imgSel()%2Cd.applyToAll()%2Cd.exit()%7D)()">Apply to all</a></em></p>
-<p>Propagates current segment translation across identical segments in the document. Saves 2 clicks. My mapping is Alt+A.</p>
-<br>
-Source code:
-<pre><code>
-(function() {
-    const a = f => new MouseEvent(f, {
-            bubbles: !0
-        }),
-        b = f => () => document.querySelector(f).click(),
-        c = f => `#fnrDialogParent .gtc-rep-modal-dialog .modal-dialog-buttons button[name=${f}]`,
-        d = {
-            imgSel: (f => () => {
-                const g = a('mousedown'),
-                    h = a('mouseup'),
-                    i = document.querySelector(f);
-                i.dispatchEvent(g), i.dispatchEvent(h)
-            })('img.jfk-button-img.gtc-img-rep'),
-            applyToAll: b(c('repDialogReplaceAll')),
-            exit: b(c('repDialogExit'))
-        };
-    d.imgSel(), d.applyToAll(), d.exit()
-})();
-</pre></code>
-<br>
-<p><em><a href="javascript:(function()%7Bvar%20copyToClipboard%20%3D%20(function()%20%7B%20var%20_dataString%20%3D%20null%3B%20document.addEventListener(%22copy%22%2C%20function(e)%20%7B%20if%20(_dataString%20!%3D%3D%20null)%20%7B%20try%20%7B%20e.clipboardData.setData(%22text%2Fplain%22%2C%20_dataString)%3B%20e.preventDefault()%3B%20%7D%20finally%20%7B%20_dataString%20%3D%20null%3B%20%7D%20%7D%20%7D)%3B%20return%20function(data)%20%7B%20_dataString%20%3D%20data%3B%20document.execCommand(%22copy%22)%3B%20%7D%3B%20%7D)()%3B%20const%20a%20%3D%20%5B...document.querySelectorAll('.notranslate').values()%5D%2C%20b%20%3D%200%20%3D%3D%3D%20a.length%20%3F%20%5B...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')%5B1%5D.contentDocument.querySelectorAll('.notranslate').values()%5D%20%3A%20a%3B%20copyToClipboard(b.find(c%20%3D%3E%20!!c.parentNode.querySelector('.goog-gtc-unit-highlight')).querySelector('a').innerText)%7D)()">Copy current hotel name</a></em></p>
-<p>Copies the current property source name, deriving it from the editbox position. Note that you still need to paste it by pressing Ctrl+V. My mapping is Ctrl+Shift+V. This copies the hotel name, and you press Ctrl+V to paste it where needed.</p><br>
-Source code:
-<pre><code>
-(function() {
-     var copyToClipboard = (function() {
-         var _dataString = null;
-         document.addEventListener("copy", function(e) {
-             if (_dataString !== null) {
-                 try {
-                     e.clipboardData.setData("text/plain", _dataString);
-                     e.preventDefault();
-                 } finally {
-                     _dataString = null;
-                 }
-             }
-         });
-         return function(data) {
-             _dataString = data;
-             document.execCommand("copy");
-         };
-     })();
-     const a = [...document.querySelectorAll('.notranslate')
-             .values()
-         ],
-         b = 0 === a.length ? [...document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar')[1].contentDocument.querySelectorAll('.notranslate')
-             .values()
-         ] : a;
-     copyToClipboard(b.find(c => !!c.parentNode.querySelector('.goog-gtc-unit-highlight'))
-         .querySelector('a')
-         .innerText)
- })()</pre></code>
-<h2>The Implementation</h2>
-<p>In order to map a keyboard shortcut to a bookmarklet, I use <a href="https://chrome.google.com/webstore/detail/shortkeys-custom-keyboard/logpjaacgmcbpdkdchjiaagddngobkck">Shortkeys for Chrome</a>. The other shortcut managers failed to emulate a click properly, and the bookmarklets wouldn't fire. Kudos to Mike Crittenden for developing it! Setting it up is more or less self-explanatory: Choose a keyboard combination, choose <i>Open bookmarklet</i> for the action it triggers, specify which bookmarklet, and lastly, don&rsquo;t forget to check <i>Active in text fields</i> for each shortcut.</p>
-Here's what my configuration looks like (it's crucial to tick off the <i>Active while in form fields</i> box for <i>every</i> shortcut).
-<br><br><hr>
-<center><img src="http://katzurki.github.io/gtt-bookmarklets/shortkeys_example_configuration.jpg"></center>
-<br><br><hr>
-<p>Reload the GTT and you&rsquo;re good to go!</p>
+
+
