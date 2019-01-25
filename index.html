@@ -42,6 +42,7 @@ div.text,
 li[lang=ru] {
   font: Tahoma, Chunkfive, sans-serif;
   background: url('hatch.png') /* wtf? */;  color: #F0F0F0 !important;
+  font-size:14px!important;
   width: 100%;
 }
 
@@ -175,12 +176,17 @@ var copyToClipboard = (function() {
          };
      })();
 
-var w=document.querySelectorAll("iframe.gtc-document-frame.jfk-scrollbar")[1].contentDocument.querySelector(".gtc-trans-inline-cont.goog-inline-block");
-w.addEventListener('keydown', captureEvent, false); /* GTT has quite a few listeners that capture and don't bubble. We're getting past them, and we bubble to get priority. */
 function getParent(obj) { var a = 'id';
             b = obj.parentNode;
-            (b[a] && b[a] * 1 == b[a]) ? b = obj.parentNode: getParent(b); return b }
+            (b[a] && b[a] * 1 == b[a]) ? b = obj.parentNode: getParent(b); return b } /* It takes about 4 .parentNodes up the DOM tree until you hit a div to reliably descend to the current hotel name.*/  
+
+var w=document.querySelectorAll("iframe.gtc-document-frame.jfk-scrollbar")[1]
+     .contentDocument.querySelector(".gtc-trans-inline-cont.goog-inline-block");
+
+w.addEventListener('keydown', captureEvent, false); /* GTT has quite a few listeners that capture and don't bubble. We're getting past them, and we bubble to get priority. */
+
 z=getParent(w).querySelector("a").innerText;
+
 function captureEvent(j) {
   if (j.altKey && j.keyCode == 90) {copyToClipboard(z)}};
           /*Alt + Z*/
