@@ -176,7 +176,7 @@ var copyToClipboard = (function() {
      })();
 
 var w=document.querySelectorAll("iframe.gtc-document-frame.jfk-scrollbar")[1].contentDocument.querySelector(".gtc-trans-inline-cont.goog-inline-block");
-w.addEventListener('keydown', captureEvent, false); /* GTT has quite a few listeners that capture and don't bubble. We're getting past them, and we bubble to get priority. 
+w.addEventListener('keydown', captureEvent, false); /* GTT has quite a few listeners that capture and don't bubble. We're getting past them, and we bubble to get priority. */
 function getParent(obj) { var a = 'id';
             b = obj.parentNode;
             (b[a] && b[a] * 1 == b[a]) ? b = obj.parentNode: getParent(b); return b }
