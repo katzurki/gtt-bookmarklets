@@ -78,31 +78,18 @@ var iframe = document.querySelectorAll('iframe.gtc-document-frame.jfk-scrollbar'
 var base = iframe.contentWindow.document.querySelector('#transEditor')
 var _document=iframe.contentWindow.document
 
-var applyToAll = (function() {eval(atob('KGZ1bmN0aW9uKCkge2NvbnN0IGEgPSBmID0+IG5ldyBNb3VzZUV2ZW50KGYsIHtidWJibGVzOiAhMH0pLGIgPSBmID0+ICgpID0+IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoZikuY2xpY2soKSxjID0gZiA9PiBgI2ZuckRpYWxvZ1BhcmVudCAuZ3RjLXJlcC1tb2RhbC1kaWFsb2cgLm1vZGFsLWRpYWxvZy1idXR0b25zIGJ1dHRvbltuYW1lPSR7Zn1dYCxkID0ge2ltZ1NlbDogKGYgPT4gKCkgPT4ge2NvbnN0IGcgPSBhKCdtb3VzZWRvd24nKSxoID0gYSgnbW91c2V1cCcpLGkgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGYpO2kuZGlzcGF0Y2hFdmVudChnKSwgaS5kaXNwYXRjaEV2ZW50KGgpfSkoJ2ltZy5qZmstYnV0dG9uLWltZy5ndGMtaW1nLXJlcCcpLGFwcGx5VG9BbGw6IGIoYygncmVwRGlhbG9nUmVwbGFjZUFsbCcpKSxleGl0OiBiKGMoJ3JlcERpYWxvZ0V4aXQnKSl9O2QuaW1nU2VsKCksIGQuYXBwbHlUb0FsbCgpLCBkLmV4aXQoKX0pKCk7'))})
-var mergeDown = (function() {eval(atob('ZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI2d0Yy1tZXJnZS1wYXJlbnQgPiBkaXYubW9kYWwtZGlhbG9nLmd0Yy1tZXJnZSA+IGRpdi5tb2RhbC1kaWFsb2ctYnV0dG9ucyA+IGJ1dHRvbi5nb29nLWJ1dHRvbnNldC1kZWZhdWx0JykuY2xpY2soKQo='))} )
-
-function fade(type, ms, el) {
-    var isIn = type === 'in',
-        opacity = isIn ? 0 : 1,
-        interval = 50,
-        duration = ms,
-        gap = interval / duration
-
-    if (isIn) {
-        el.style.display = 'inline'
-        el.style.opacity = opacity
+_document.onkeydown = function(event) {
+    var current_name = _document.querySelector('#current-hotel-name')
+    if (current_name) { current_name.remove() }
+    if (event.altKey) { current_name = hotelName() }
+    if (event.altKey && event.keyCode == 90) { copyToClipboard(current_name)
+        event.preventDefault()
     }
-
-    function func() {
-        opacity = isIn ? opacity + gap : opacity - gap
-        el.style.opacity = opacity
-
-        if (opacity <= 0) el.style.display = 'none'
-        if (opacity <= 0 || opacity >= 1) window.clearInterval(fading)
-    }
-
-    var fading = window.setInterval(func, interval)
+    if (event.altKey && event.keyCode == 65) {applyToAll()}
+    if (event.altKey && event.keyCode == 83) {mergeDown()}
 }
+
+_document.onkeyup = function() { fadeOut() }
 
 var copyToClipboard = (function() {
     var _dataString = null
@@ -122,6 +109,8 @@ var copyToClipboard = (function() {
     }
 })()
 
+/* _document and document are really funky in GTT because of iframes and constant calls to other sites,
+so I did this for scope */
 function getHotelName() {
     var hotel_name = base.parentNode.parentElement.parentElement.parentElement.parentElement.querySelector('a').textContent
     return hotel_name
@@ -145,18 +134,34 @@ function fadeOut() {
 
 }
 
-_document.onkeydown = function(event) {
-    var current_name = _document.querySelector('#current-hotel-name')
-    if (current_name) { current_name.remove() }
-    if (event.altKey) { current_name = hotelName() }
-    if (event.altKey && event.keyCode == 90) { copyToClipboard(current_name)
-        event.preventDefault()
+/*Pardon the unsavory blobs. These are Apply To All and Merge Down from the previous version.*/
+var applyToAll = (function() {eval(atob('KGZ1bmN0aW9uKCkge2NvbnN0IGEgPSBmID0+IG5ldyBNb3VzZUV2ZW50KGYsIHtidWJibGVzOiAhMH0pLGIgPSBmID0+ICgpID0+IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoZikuY2xpY2soKSxjID0gZiA9PiBgI2ZuckRpYWxvZ1BhcmVudCAuZ3RjLXJlcC1tb2RhbC1kaWFsb2cgLm1vZGFsLWRpYWxvZy1idXR0b25zIGJ1dHRvbltuYW1lPSR7Zn1dYCxkID0ge2ltZ1NlbDogKGYgPT4gKCkgPT4ge2NvbnN0IGcgPSBhKCdtb3VzZWRvd24nKSxoID0gYSgnbW91c2V1cCcpLGkgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGYpO2kuZGlzcGF0Y2hFdmVudChnKSwgaS5kaXNwYXRjaEV2ZW50KGgpfSkoJ2ltZy5qZmstYnV0dG9uLWltZy5ndGMtaW1nLXJlcCcpLGFwcGx5VG9BbGw6IGIoYygncmVwRGlhbG9nUmVwbGFjZUFsbCcpKSxleGl0OiBiKGMoJ3JlcERpYWxvZ0V4aXQnKSl9O2QuaW1nU2VsKCksIGQuYXBwbHlUb0FsbCgpLCBkLmV4aXQoKX0pKCk7'))})
+var mergeDown = (function() {eval(atob('ZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI2d0Yy1tZXJnZS1wYXJlbnQgPiBkaXYubW9kYWwtZGlhbG9nLmd0Yy1tZXJnZSA+IGRpdi5tb2RhbC1kaWFsb2ctYnV0dG9ucyA+IGJ1dHRvbi5nb29nLWJ1dHRvbnNldC1kZWZhdWx0JykuY2xpY2soKQo='))} )
+
+/*And this was gratefully stolen from some big thread on Stack Overflow*/
+function fade(type, ms, el) {
+    var isIn = type === 'in',
+        opacity = isIn ? 0 : 1,
+        interval = 50,
+        duration = ms,
+        gap = interval / duration
+
+    if (isIn) {
+        el.style.display = 'inline'
+        el.style.opacity = opacity
     }
-    if (event.altKey && event.keyCode == 65) {applyToAll()}
-    if (event.altKey && event.keyCode == 83) {mergeDown()}
+
+    function func() {
+        opacity = isIn ? opacity + gap : opacity - gap
+        el.style.opacity = opacity
+
+        if (opacity <= 0) el.style.display = 'none'
+        if (opacity <= 0 || opacity >= 1) window.clearInterval(fading)
+    }
+
+    var fading = window.setInterval(func, interval)
 }
 
-_document.onkeyup = function() { fadeOut() }
 </pre></code>
 
      
